@@ -1,10 +1,16 @@
-import Post from "./Post";
-import "./styles/style.css"
-import image from "./assets/img.png"
-import json from "./assets/json"
-const post = new Post("WebPack POst title", image)
+import * as $ from "jquery"
 
+import Post from "@models/Post";
+import "@/styles/style.css"
+import image from "@/assets/img"
+import json from "@/assets/json"
+import xmlData from '@/assets/data.xml'
+import csvData from "@/assets/data.csv"
 
-console.log("post to strng: ",post.toString() )
+const post = new Post("WebPack Post title", image)
 
-console.log("json: ",json )
+$('pre').addClass('code').html(post.toString())
+
+console.log("xml-data: ", xmlData)
+console.log("csv-data: ", csvData)
+console.log("json: ", json)

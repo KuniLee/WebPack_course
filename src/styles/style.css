@@ -1,3 +1,10 @@
+@import "roboto.css";
+@import "~normalize.css";
+
+body{
+    font-family: "Roboto", sans-serif;
+}
+
 .container{
     padding-top: 2rem;
     max-width: 1000px;
@@ -14,4 +21,8 @@ h1{
     height: 200px;
     width: 200px;
     margin: 0 auto;
+}
+
+.code{
+    background-color: #b8b8e0;
 }
