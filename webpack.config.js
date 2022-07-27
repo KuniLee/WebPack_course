@@ -25,6 +25,14 @@ const optimization = ()=>{
     return config
 }
 
+const sccLoaders = extra =>{
+    const loaders = [MiniCssExtractPlugin.loader, "css-loader"]
+    if (extra){
+        loaders.push(extra)
+    }
+    return loaders
+}
+
 const config = {
     context: path.resolve(__dirname, 'src'),
     mode: "development",
@@ -65,8 +73,13 @@ const config = {
     module: {
         rules: [{
             test: /\.css$/,
-            use: [MiniCssExtractPlugin.loader, "css-loader"],
+            use: sccLoaders(),
         },
+            {
+                test: /\.s[ac]ss$/,
+                use:  sccLoaders( "sass-loader"),
+            },
+
             {
                 test: /\.(png|jpg|svg|gif)/,
                 type: 'asset/resource'

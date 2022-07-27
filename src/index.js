@@ -6,6 +6,7 @@ import image from "@/assets/img"
 import json from "@/assets/json"
 import xmlData from '@/assets/data.xml'
 import csvData from "@/assets/data.csv"
+import "@/styles/scss.scss"
 
 const post = new Post("WebPack Post title", image)
 
