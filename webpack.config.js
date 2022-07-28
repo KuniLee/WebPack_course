@@ -6,10 +6,13 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const devMode = process.env.NODE_ENV !== "production";
 const TerserPlugin = require("terser-webpack-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const ESLintWebpackPlugin = require("eslint-webpack-plugin");
+//const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const optimization = ()=>{
     const config = {
-        runtimeChunk: 'single',
+        //chunkIds:'named',
+        //runtimeChunk: 'single',
             splitChunks: {
         chunks: "all"
     },
@@ -23,6 +26,33 @@ const optimization = ()=>{
         ]
     }
     return config
+}
+
+const thePlugins = () => {
+  const pluginBase = [
+      new HTMLWebpackPlugin({
+          template: "./index.html",
+          minify: !devMode
+      }),
+      new CleanWebpackPlugin(),
+      new MiniCssExtractPlugin({
+          filename: "[name].[contenthash].css",
+      }),
+      new CopyPlugin({
+          patterns: [
+              {
+                  from: path.resolve(__dirname, "src/favicon.ico"),
+                  to: path.resolve(__dirname, 'dist')
+              }
+          ]
+      }),
+      new ESLintWebpackPlugin()
+  ]
+    // if (!devMode){
+    //     base.push( new BundleAnalyzerPlugin())
+    // }
+
+    return pluginBase
 }
 
 const sccLoaders = extra =>{
@@ -52,26 +82,21 @@ const config = {
         },
     },
     optimization: optimization(),
-    plugins: [
-        new HTMLWebpackPlugin({
-            template: "./index.html",
-            minify: !devMode
-        }),
-        new CleanWebpackPlugin(),
-        new MiniCssExtractPlugin({
-            filename: "[name].[contenthash].css",
-        }),
-        new CopyPlugin({
-            patterns: [
-                {
-                    from: path.resolve(__dirname, "src/favicon.ico"),
-                    to: path.resolve(__dirname, 'dist')
-                }
-            ]
-        })
-    ],
+    plugins: thePlugins(),
+    devtool: devMode ? "source-map" : false,
     module: {
-        rules: [{
+        rules: [
+            {
+                test: /\.m?js$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: "babel-loader",
+                    options: {
+                        presets: ['@babel/preset-env']
+                    }
+                }
+            },
+            {
             test: /\.css$/,
             use: sccLoaders(),
         },
