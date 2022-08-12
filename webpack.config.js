@@ -12,8 +12,8 @@ const ESLintWebpackPlugin = require("eslint-webpack-plugin");
 const optimization = ()=>{
     const config = {
         //chunkIds:'named',
-        //runtimeChunk: 'single',
-            splitChunks: {
+        runtimeChunk: devMode ? 'single': false,
+        splitChunks: {
         chunks: "all"
     },
         minimize: false
@@ -29,7 +29,7 @@ const optimization = ()=>{
 }
 
 const thePlugins = () => {
-  const pluginBase = [
+    return [
       new HTMLWebpackPlugin({
           template: "./index.html",
           minify: !devMode
@@ -46,13 +46,14 @@ const thePlugins = () => {
               }
           ]
       }),
-      new ESLintWebpackPlugin()
+      new ESLintWebpackPlugin(),
+
   ]
     // if (!devMode){
     //     base.push( new BundleAnalyzerPlugin())
     // }
 
-    return pluginBase
+
 }
 
 const sccLoaders = extra =>{
@@ -68,7 +69,7 @@ const config = {
     mode: "development",
     entry: {
         main: "./index.js",
-        analytics: "./analytics.js"
+        //analytics: "./analytics.js"
     },
     output: {
         filename: "[name].[contenthash].js",
@@ -99,18 +100,18 @@ const config = {
             {
             test: /\.css$/,
             use: sccLoaders(),
-        },
+             },
             {
                 test: /\.s[ac]ss$/,
                 use:  sccLoaders( "sass-loader"),
             },
 
             {
-                test: /\.(png|jpg|svg|gif)/,
+                test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
                 type: 'asset/resource'
             },
             {
-                test: /\.(woff|woff2|eot|ttf|otf)$/i,
+                test: /\.(woff(2)?|eot|ttf|otf|svg|)$/,
                 type: 'asset/resource',
             },
             {
@@ -123,9 +124,12 @@ const config = {
             }]
     },
     devServer: {
-        port: 4200
+        port: 4200,
+        compress: true,
+        open: true,
     }
 }
 
 
 module.exports = config
+
