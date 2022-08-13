@@ -73,7 +73,7 @@ const config = {
     },
     output: {
         filename: "[name].[contenthash].js",
-        path: path.resolve(__dirname, "dist")
+        path: process.env.FOR_GITHUB ? path.resolve(__dirname, "docs") : path.resolve(__dirname, "dist")
     },
     resolve: {
         extensions: [".js", ".json", ".png"],
